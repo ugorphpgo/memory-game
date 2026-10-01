@@ -1,3 +1,7 @@
+const game = {
+    moves:0, // number of moves
+    pairs:0, // completed pairs state
+}
 const images=[
     'assets/images/dog-1-cocker.webp',
     'assets/images/dog-2-retriever.webp',
@@ -8,6 +12,8 @@ const images=[
     'assets/images/dog-7-bulldog.webp',
     'assets/images/dog-8-greyhound.webp',
 ];
+
+
 const body=document.body;
 
 
@@ -48,8 +54,32 @@ function makeDeck(images) {
     shuffle(cards);
     return cards;
 }
+function startGame(){
+    game.moves=0;
+    game.pairs=0;
+    board.replaceChildren(...makeDeck(images));
+    updateStats();
 
-const board= el('div','board',...makeDeck(images));
+}
+const movesEl=el('span','move__count');
+const pairsEl=el('span','pair__count');
+const newGameBtn=el('button','newGame__button','New game');
+const leaderBoardBtn=el('button','leaderboard__button','Leaderboard');
+const header=el('header','header',newGameBtn,leaderBoardBtn,movesEl,pairsEl);
 
-body.append(board);
+newGameBtn.setAttribute('type','button');
+leaderBoardBtn.setAttribute('type','button');
+
+function updateStats(){
+    movesEl.textContent = `Moves: ${game.moves}`;
+    pairsEl.textContent = `Pairs: ${game.pairs} of 8`;
+}
+const board= el('div','board');
+startGame();
+
+body.append(header,board);
+
+newGameBtn.addEventListener('click',startGame)
+
+
 
