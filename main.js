@@ -1,12 +1,12 @@
 const images=[
-    'images/dog-1-cocker.webp',
-    'images/dog-2-retriever.webp',
-    'images/dog-3-beagle.webp',
-    'images/dog-4-dalmatian.webp',
-    'images/dog-5-shiba.webp',
-    'images/dog-6-poodle.webp',
-    'images/dog-7-bulldog.webp',
-    'images/dog-8-greyhound.webp',
+    'assets/images/dog-1-cocker.webp',
+    'assets/images/dog-2-retriever.webp',
+    'assets/images/dog-3-beagle.webp',
+    'assets/images/dog-4-dalmatian.webp',
+    'assets/images/dog-5-shiba.webp',
+    'assets/images/dog-6-poodle.webp',
+    'assets/images/dog-7-bulldog.webp',
+    'assets/images/dog-8-greyhound.webp',
 ];
 const body=document.body;
 
