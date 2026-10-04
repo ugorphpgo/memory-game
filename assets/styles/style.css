@@ -59,3 +59,14 @@ header{
     display: inline-block;
 }
 
+.card.is-open .card__face{
+    display: block;
+}
+.card.is-open .card__back{
+    display: none;
+}
+
+.card.is-matched .card__face{
+    display: block;
+}
+

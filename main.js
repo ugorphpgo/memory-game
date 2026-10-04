@@ -1,6 +1,9 @@
 const game = {
     moves:0, // number of moves
     pairs:0, // completed pairs state
+    first:null,
+    locked:false,
+    timer: null,
 }
 const images=[
     'assets/images/dog-1-cocker.webp',
@@ -55,12 +58,43 @@ function makeDeck(images) {
     return cards;
 }
 function startGame(){
+    clearTimeout(game.timer);
+    game.timer=null;
+    game.first=null;
+    game.locked=false;
     game.moves=0;
     game.pairs=0;
     board.replaceChildren(...makeDeck(images));
     updateStats();
-
 }
+
+function pick(card){
+    if(card===null||game.locked||card.classList.contains('is-open')) return;
+    card.classList.add('is-open');
+    if (!game.first) {
+        game.first = card;
+        return;
+    }
+    const a = game.first;
+    const b = card;
+    game.first = null;
+    game.moves++;
+    if (a.dataset.image === b.dataset.image) {
+        a.classList.add('is-matched');
+        b.classList.add('is-matched');
+        game.pairs++;
+    } else {
+        game.locked = true;
+        game.timer = setTimeout(() => {
+            a.classList.remove('is-open');
+            b.classList.remove('is-open');
+            game.locked = false;
+            game.timer = null;
+        }, 1000);
+    }
+    updateStats();
+}
+
 const movesEl=el('span','move__count');
 const pairsEl=el('span','pair__count');
 const newGameBtn=el('button','newGame__button','New game');
@@ -80,6 +114,12 @@ startGame();
 body.append(header,board);
 
 newGameBtn.addEventListener('click',startGame)
+
+board.addEventListener('click', (event) => {
+    const card = event.target.closest('.card');
+    pick(card);
+});
+
 
 
 
