@@ -1,4 +1,5 @@
 const STORAGE_KEY='memory-game-results';
+const backImg='assets/images/card-back.webp';
 const game = {
     moves:0, // number of moves
     pairs:0, // completed pairs state
@@ -37,10 +38,12 @@ function shuffle(images){
 }
 function createCard(image){
     const img=el('img','card__img');
+    const backImage=el('img','card__img');
     img.src=image;
+    backImage.src=backImg;
     img.alt='dog card';
     const card=el('div','card',
-        el('div','card__back'),
+        el('div','card__back',backImage),
         el('div','card__face',img));
     card.dataset.image=image;
     return card;
@@ -147,16 +150,17 @@ function closeModal(){
     modal.close();
 }
 
+
 const movesEl=el('span','move__count');
 const pairsEl=el('span','pair__count');
+const statsEl = el('div','stats',movesEl,pairsEl);
 const newGameBtn=el('button','newGame__button','Новая игра');
 const modalNewGame =el('button','newGame__button','Новая игра');
 const leaderBoardBtn=el('button','leaderboard__button','Таблица лидеров');
-const header=el('header','header',newGameBtn,leaderBoardBtn,movesEl,pairsEl);
+const header=el('header','header',leaderBoardBtn,newGameBtn,statsEl);
 const modal=el('dialog','modal');
 const modalBody=el('div','modal__body');
 const modalClose=el('button','close','Закрыть');
-let zaglushka=el('p', null, 'Пока нет результатов');
 modalClose.type='button';
 
 newGameBtn.setAttribute('type','button');
