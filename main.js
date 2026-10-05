@@ -68,6 +68,15 @@ function startGame(){
     updateStats();
 }
 
+function updateStats(){
+    movesEl.textContent = `Ходов: ${game.moves}`;
+    pairsEl.textContent = `Пар собрано: ${game.pairs} из 8`;
+}
+
+function finishGame(moves){
+    openModal(el('p',null,`Победа! ВАм понадобилось ${moves} хода(-ов)`),modalNewGame)
+}
+
 function pick(card){
     if(card===null||game.locked||card.classList.contains('is-open')) return;
     card.classList.add('is-open');
@@ -83,6 +92,9 @@ function pick(card){
         a.classList.add('is-matched');
         b.classList.add('is-matched');
         game.pairs++;
+        if (game.pairs===8) {
+            updateStats();
+            finishGame(game.moves);}
     } else {
         game.locked = true;
         game.timer = setTimeout(() => {
@@ -95,29 +107,56 @@ function pick(card){
     updateStats();
 }
 
+function openModal(...content){
+    modalBody.replaceChildren(...content);
+    modal.showModal();
+}
+
+function closeModal(){
+    modal.close();
+}
+
 const movesEl=el('span','move__count');
 const pairsEl=el('span','pair__count');
-const newGameBtn=el('button','newGame__button','New game');
-const leaderBoardBtn=el('button','leaderboard__button','Leaderboard');
+const newGameBtn=el('button','newGame__button','Новая игра');
+const modalNewGame =el('button','newGame__button','Новая игра');
+const leaderBoardBtn=el('button','leaderboard__button','Таблица лидеров');
 const header=el('header','header',newGameBtn,leaderBoardBtn,movesEl,pairsEl);
+const modal=el('dialog','modal');
+const modalBody=el('div','modal__body');
+const modalClose=el('button','close','Закрыть');
+let zaglushka=el('p', null, 'Пока нет результатов');
+modalClose.type='button';
 
 newGameBtn.setAttribute('type','button');
 leaderBoardBtn.setAttribute('type','button');
 
-function updateStats(){
-    movesEl.textContent = `Moves: ${game.moves}`;
-    pairsEl.textContent = `Pairs: ${game.pairs} of 8`;
-}
 const board= el('div','board');
 startGame();
 
 body.append(header,board);
+modal.append(el('div','modal__box',modalBody,modalClose));
+document.body.append(modal);
+newGameBtn.addEventListener('click',startGame);
+modalNewGame.addEventListener('click',()=>{
+    closeModal();
+    startGame();
+});
+modalClose.addEventListener('click',closeModal);
 
-newGameBtn.addEventListener('click',startGame)
+modal.addEventListener('click',(event)=>{
+    if (event.target===modal) {
+        closeModal()
+    }
+});
 
 board.addEventListener('click', (event) => {
     const card = event.target.closest('.card');
     pick(card);
+});
+
+leaderBoardBtn.addEventListener('click',(event)=>{
+    if (event.target===leaderBoardBtn)openModal(zaglushka);
 });
 
 
