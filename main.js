@@ -107,7 +107,13 @@ function renderLeaders(results) {
 }
 
 function finishGame(){
-    openModal(el('p',null,`Победа! ВАм понадобилось ${game.moves} хода(-ов)`),modalNewGame);
+    if (game.moves<=12){
+        openModal(el('p','victory',`Да вы читер! Вы справились за ${game.moves} хода(-ов)`),modalControls);
+    }else if(game.moves>=22){
+        openModal(el('p','victory',`Это было очень медленно, рад что вы растягивали удовольствие! Вы справились за ${game.moves} хода(-ов)`),modalControls);
+    }else {
+        openModal(el('p','victory',`Победа! Вы справились ${game.moves} хода(-ов)`),modalControls)
+    }
     saveResults(addResults(loadResults(),game.moves,Date.now()));
 }
 
@@ -155,12 +161,13 @@ const movesEl=el('span','move__count');
 const pairsEl=el('span','pair__count');
 const statsEl = el('div','stats',movesEl,pairsEl);
 const newGameBtn=el('button','newGame__button','Новая игра');
-const modalNewGame =el('button','newGame__button','Новая игра');
 const leaderBoardBtn=el('button','leaderboard__button','Таблица лидеров');
 const header=el('header','header',leaderBoardBtn,newGameBtn,statsEl);
 const modal=el('dialog','modal');
-const modalBody=el('div','modal__body');
+const modalNewGame =el('button','newGame__button','Новая игра');
 const modalClose=el('button','close','Закрыть');
+const modalControls=el('div','modal__controls',modalNewGame,modalClose);
+const modalBody=el('div','modal__body');
 modalClose.type='button';
 
 newGameBtn.setAttribute('type','button');
@@ -170,7 +177,7 @@ const board= el('div','board');
 startGame();
 
 body.append(header,board);
-modal.append(el('div','modal__box',modalBody,modalClose));
+modal.append(el('div','modal__box',modalBody,modalControls));
 document.body.append(modal);
 newGameBtn.addEventListener('click',startGame);
 modalNewGame.addEventListener('click',()=>{

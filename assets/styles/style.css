@@ -16,20 +16,39 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
+    background-image:url("../images/board.png");
+    background-color: #EDC314;
 }
 
 header{
-    width: 100%;
-    padding:1rem ;
+    padding:0.8rem ;
     font-family: Inter,sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-
+    border: black solid 1px;
+    border-radius: 25px;
+    background-color: #EDC314;
+    margin: 0.3rem;
 }
 
 table.leaders{
+
+}
+
+dialog {
+    font-family: Inter,sans-serif;
+    max-width: 500px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    padding: 0;
+    background-color: orange;
+    color: #000000;
+    border-radius: 30px;
 
 }
 .stats{
@@ -48,8 +67,7 @@ table.leaders{
     justify-items: center;
     gap: 1rem;
     perspective: 600px;
-    background-image:url("../images/board.png");
-    background-color: #f46161;
+    background-color: rgba(100, 55, 152, 0.4); /* Чёрный цвет с прозрачностью 50% */
 }
 
 .card{
@@ -59,10 +77,12 @@ table.leaders{
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.5s;
+
 }
 
 .card:hover{
     transform: scale(1.03);
+    border-radius: 15px;
     box-shadow: 2px 2px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -79,6 +99,7 @@ table.leaders{
     object-position: center;
     width: 100%;
     height: 100%;
+    border-radius: 15px;
 }
 
 .card__face{
@@ -87,6 +108,7 @@ table.leaders{
     position: absolute;
     inset: 0;
     transform: rotateY(-180deg);
+    border-radius: 15px;
 
 }
 
@@ -95,6 +117,7 @@ table.leaders{
     object-position: center;
     width: 100%;
     height: 100%;
+    border-radius: 15px;
 }
 
 button {
@@ -110,8 +133,9 @@ button {
 }
 
 .card.is-matched .card__face{
-    border: 5px green solid;
-    border-radius: 10px;
+    border: solid 3px #3ee07f;
+    border-radius: 15px;
+    box-shadow:  1px 1px 20px rgba(135, 255, 40, 0.83);
 }
 
 .modal{
@@ -121,12 +145,56 @@ button {
 
 .modal__box{
     padding:24px;
+    max-width: 500px;
+}
+
+header button {
+    background-color: #EDC314;
+    border: 1px solid black;
+    border-radius: 15px;
+    transition: all 0.4s ease-in-out;
+}
+
+dialog button {
+    background-color: orange;
+    border: 1px solid black;
+    border-radius: 15px;
+    transition: all 0.4s ease-in-out;
+}
+
+button:hover{
+    background-color: #D3301E;
+    border: 1px solid white;
+    border-radius: 15px;
 }
 
 .modal::backdrop{
     background-color: rgba(0 0 0 / 0.5);
 }
 
+.modal__title{
+    justify-self: center;
+}
+
+.modal__controls{
+    display: flex;
+    justify-content: space-between;
+}
+
 body:has(.modal[open]){
     overflow: hidden
+}
+
+thead tr{
+    display: grid;
+    grid-template-columns:repeat(3, minmax(0,180px));
+}
+
+tbody tr{
+    display: grid;
+    grid-template-columns:repeat(3, minmax(0,180px));
+}
+
+tr td{
+    text-align: center;
 }
