@@ -95,6 +95,14 @@ function formatDate(timestamp){
     return `${day}.${month}.${date.getFullYear()}`;
 }
 
+function renderLeaders(results) {
+    if(results.length===0) return el('p',null,"Пока нет результатов");
+    const head = el('thead',null,el('tr',null,el('th',null,' Место'),el('th',null,' Ходы'),el('th',null,'Дата')));
+    const rows = results.map((r,i) => el('tr',null,el('td',null,i+1),el('td',null,r.moves),el('td',null,formatDate(r.date)))
+    );
+    return el('table','leaders',head,el('tbody',null,...rows));
+}
+
 function finishGame(){
     openModal(el('p',null,`Победа! ВАм понадобилось ${game.moves} хода(-ов)`),modalNewGame);
     saveResults(addResults(loadResults(),game.moves,Date.now()));
