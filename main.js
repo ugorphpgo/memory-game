@@ -1,3 +1,4 @@
+const STORAGE_KEY='memory-game-results';
 const game = {
     moves:0, // number of moves
     pairs:0, // completed pairs state
@@ -73,8 +74,30 @@ function updateStats(){
     pairsEl.textContent = `Пар собрано: ${game.pairs} из 8`;
 }
 
-function finishGame(moves){
-    openModal(el('p',null,`Победа! ВАм понадобилось ${moves} хода(-ов)`),modalNewGame)
+function loadResults(){
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function saveResults(results){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+}
+
+function addResults(results,moves,date){
+    return[...results,{moves,date}]
+        .sort((a,b)=>a.moves - b.moves || a.date - b.date)
+        .slice(0,10);
+}
+
+function formatDate(timestamp){
+    const date = new Date(timestamp);
+    const month = String(date.getMonth() + 1).padStart(2,'0');
+    const day = String(date.getDate()).padStart(2,'0');
+    return `${day}.${month}.${date.getFullYear()}`;
+}
+
+function finishGame(){
+    openModal(el('p',null,`Победа! ВАм понадобилось ${game.moves} хода(-ов)`),modalNewGame);
+    saveResults(addResults(loadResults(),game.moves,Date.now()));
 }
 
 function pick(card){
@@ -94,7 +117,7 @@ function pick(card){
         game.pairs++;
         if (game.pairs===8) {
             updateStats();
-            finishGame(game.moves);}
+            finishGame();}
     } else {
         game.locked = true;
         game.timer = setTimeout(() => {
@@ -155,10 +178,6 @@ board.addEventListener('click', (event) => {
     pick(card);
 });
 
-leaderBoardBtn.addEventListener('click',(event)=>{
-    if (event.target===leaderBoardBtn)openModal(zaglushka);
+leaderBoardBtn.addEventListener('click',()=>{
+    openModal(el('h2','modal__title','Таблица лидеров'), renderLeaders(loadResults()));
 });
-
-
-
-
