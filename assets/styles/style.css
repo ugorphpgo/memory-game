@@ -54,8 +54,11 @@ header{
     position: absolute;
     inset: 0
 }
-
-.newGameBtn{
+button {
+    padding: 5px;
+    margin: 5px;
+}
+.newGame__button{
     display: inline-block;
 }
 
@@ -70,3 +73,19 @@ header{
     display: block;
 }
 
+.modal{
+    padding: 0;
+    border: 0;
+}
+
+.modal__box{
+    padding:24px;
+}
+
+.modal::backdrop{
+    background-color: rgba(0 0 0 / 0.5);
+}
+
+body:has(.modal[open]){
+    overflow: hidden
+}
