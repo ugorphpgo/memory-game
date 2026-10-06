@@ -108,11 +108,11 @@ function renderLeaders(results) {
 
 function finishGame(){
     if (game.moves<=12){
-        openModal(el('p','victory',`Да вы читер! Вы справились за ${game.moves} хода(-ов)`),modalControls);
+        openModal([el('p','victory',`Да вы читер! Вы справились за ${game.moves} хода(-ов)`)],[modalNewGame,modalClose]);
     }else if(game.moves>=22){
-        openModal(el('p','victory',`Это было очень медленно, рад что вы растягивали удовольствие! Вы справились за ${game.moves} хода(-ов)`),modalControls);
+        openModal([el('p','victory',`Это было очень медленно, рад что вы растягивали удовольствие! Вы справились за ${game.moves} хода(-ов)`)],[modalNewGame,modalClose]);
     }else {
-        openModal(el('p','victory',`Победа! Вы справились ${game.moves} хода(-ов)`),modalControls)
+        openModal([el('p','victory',`Победа! Вы справились ${game.moves} хода(-ов)`)],[modalNewGame,modalClose])
     }
     saveResults(addResults(loadResults(),game.moves,Date.now()));
 }
@@ -147,8 +147,9 @@ function pick(card){
     updateStats();
 }
 
-function openModal(...content){
+function openModal(content, actions){
     modalBody.replaceChildren(...content);
+    modalActions.replaceChildren(...actions)
     modal.showModal();
 }
 
@@ -166,7 +167,7 @@ const header=el('header','header',leaderBoardBtn,newGameBtn,statsEl);
 const modal=el('dialog','modal');
 const modalNewGame =el('button','newGame__button','Новая игра');
 const modalClose=el('button','close','Закрыть');
-const modalControls=el('div','modal__controls',modalNewGame,modalClose);
+const modalActions=el('div','modal__controls');
 const modalBody=el('div','modal__body');
 modalClose.type='button';
 
@@ -177,7 +178,7 @@ const board= el('div','board');
 startGame();
 
 body.append(header,board);
-modal.append(el('div','modal__box',modalBody,modalControls));
+modal.append(el('div','modal__box',modalBody,modalActions));
 document.body.append(modal);
 newGameBtn.addEventListener('click',startGame);
 modalNewGame.addEventListener('click',()=>{
@@ -198,5 +199,5 @@ board.addEventListener('click', (event) => {
 });
 
 leaderBoardBtn.addEventListener('click',()=>{
-    openModal(el('h2','modal__title','Таблица лидеров'), renderLeaders(loadResults()));
+    openModal([el('h2','modal__title','Таблица лидеров'), renderLeaders(loadResults())],[modalClose]);
 });
